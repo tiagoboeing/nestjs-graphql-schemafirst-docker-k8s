@@ -1,0 +1,35 @@
+type Integration {
+  std: String
+  sat: String
+  status: String
+}
+
+input CreateIntegrationInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateIntegrationInput {
+  id: Int!
+}
+
+type Query {
+  integrations: [Integration]!
+  integration(id: Int!): Integration
+}
+
+type Mutation {
+  createIntegration(
+    createIntegrationInput: CreateIntegrationInput!
+  ): Integration!
+  updateIntegration(
+    updateIntegrationInput: UpdateIntegrationInput!
+  ): Integration!
+  removeIntegration(id: Int!): Integration
+}
+
+type Subscription {
+  integrationCreated: Integration
+  integrationUpdated: Integration!
+  integrationRemoved: Integration!
+}
