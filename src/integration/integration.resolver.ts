@@ -1,7 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { Integration } from '../graphql';
 import { CreateIntegrationInput } from './dto/create-integration.input';
 import { UpdateIntegrationInput } from './dto/update-integration.input';
 import { IntegrationService } from './integration.service';
@@ -18,13 +17,9 @@ export class IntegrationResolver {
     @Args('createIntegrationInput')
     createIntegrationInput: CreateIntegrationInput,
   ) {
-    await this.pubSub.publish('integrationCreated', {
-      sat: '123',
-      std: '123',
-      status: '1 - Ok',
-    });
-
-    return this.integrationService.create(createIntegrationInput);
+    const payload = this.integrationService.create(createIntegrationInput);
+    await this.pubSub.publish('integrationCreated', payload);
+    return payload;
   }
 
   @Query('integrations')
