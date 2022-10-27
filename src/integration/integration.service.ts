@@ -1,15 +1,23 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { catchError, firstValueFrom, map, tap } from 'rxjs';
 import { CreateIntegrationInput } from './dto/create-integration.input';
 import { UpdateIntegrationInput } from './dto/update-integration.input';
 
 @Injectable()
 export class IntegrationService {
-  create(createIntegrationInput: CreateIntegrationInput) {
-    return {
-      sat: '123',
-      std: '123',
-      status: '1 - Ok',
-    };
+  constructor(private readonly httpService: HttpService) {}
+
+  async create(createIntegrationInput: CreateIntegrationInput): Promise<any> {
+    return this.httpService
+      .get<any>('http://172.24.240.1:8080/integration')
+      .pipe(
+        map((response) => response.data),
+        catchError((error) => {
+          console.error(error.response.data);
+          throw 'An error happened!';
+        }),
+      );
   }
 
   findAll() {

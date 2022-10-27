@@ -17,7 +17,10 @@ export class IntegrationResolver {
     @Args('createIntegrationInput')
     createIntegrationInput: CreateIntegrationInput,
   ) {
-    const payload = this.integrationService.create(createIntegrationInput);
+    const payload = await this.integrationService.create(
+      createIntegrationInput,
+    );
+
     await this.pubSub.publish('integrationCreated', payload);
     return payload;
   }
