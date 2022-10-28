@@ -1,0 +1,21 @@
+execution:
+  - concurrency: 50
+    ramp-up: 1m
+    hold-for: 5m
+    scenario: create-integration
+
+modules:
+  jmeter:
+    gui: false
+
+scenarios:
+  create-integration:
+    timeout: 5s
+    store-cache: false
+    headers:
+      Content-Type: application/json
+    requests:
+      - url: http://localhost:3000/graphql
+        label: createIntegration
+        method: POST
+        body: '{"query":"mutation {\n  createIntegration(createIntegrationInput: {exampleField: 1}){\n    std\n    sat\n    status\n    __typename\n  }\n}","variables":{}}'

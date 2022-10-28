@@ -1,1 +1,3 @@
-export class CreateIntegrationInput {}
+export class CreateIntegrationInput {
+  id: string;
+}

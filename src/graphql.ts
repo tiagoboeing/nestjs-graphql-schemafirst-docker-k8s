@@ -9,48 +9,30 @@
 /* eslint-disable */
 
 export class CreateIntegrationInput {
-    exampleField?: Nullable<number>;
+    id: string;
 }
 
-export class UpdateIntegrationInput {
-    id: number;
-}
-
-export class Integration {
-    __typename?: 'Integration';
-    std?: Nullable<string>;
-    sat?: Nullable<string>;
-    status?: Nullable<string>;
-}
-
-export abstract class IQuery {
-    __typename?: 'IQuery';
-
-    abstract integrations(): Nullable<Integration>[] | Promise<Nullable<Integration>[]>;
-
-    abstract integration(id: number): Nullable<Integration> | Promise<Nullable<Integration>>;
-
-    abstract hello(): string | Promise<string>;
+export class IntegrationStep {
+    __typename?: 'IntegrationStep';
+    step: string;
 }
 
 export abstract class IMutation {
     __typename?: 'IMutation';
 
-    abstract createIntegration(createIntegrationInput: CreateIntegrationInput): Integration | Promise<Integration>;
-
-    abstract updateIntegration(updateIntegrationInput: UpdateIntegrationInput): Integration | Promise<Integration>;
-
-    abstract removeIntegration(id: number): Nullable<Integration> | Promise<Nullable<Integration>>;
+    abstract createIntegration(createIntegrationInput: CreateIntegrationInput): boolean | Promise<boolean>;
 }
 
 export abstract class ISubscription {
     __typename?: 'ISubscription';
 
-    abstract integrationCreated(): Nullable<Integration> | Promise<Nullable<Integration>>;
+    abstract integrationCreated(id: string): Nullable<Nullable<IntegrationStep>[]> | Promise<Nullable<Nullable<IntegrationStep>[]>>;
+}
 
-    abstract integrationUpdated(): Integration | Promise<Integration>;
+export abstract class IQuery {
+    __typename?: 'IQuery';
 
-    abstract integrationRemoved(): Integration | Promise<Integration>;
+    abstract hello(): string | Promise<string>;
 }
 
 type Nullable<T> = T | null;

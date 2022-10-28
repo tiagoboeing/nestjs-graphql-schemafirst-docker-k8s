@@ -1,35 +1,17 @@
-type Integration {
-  std: String
-  sat: String
-  status: String
+type IntegrationStep {
+  step: String!
 }
 
 input CreateIntegrationInput {
-  # Example field (placeholder)
-  exampleField: Int
+  id: String!
 }
 
-input UpdateIntegrationInput {
-  id: Int!
-}
-
-type Query {
-  integrations: [Integration]!
-  integration(id: Int!): Integration
-}
+# type Query {}
 
 type Mutation {
-  createIntegration(
-    createIntegrationInput: CreateIntegrationInput!
-  ): Integration!
-  updateIntegration(
-    updateIntegrationInput: UpdateIntegrationInput!
-  ): Integration!
-  removeIntegration(id: Int!): Integration
+  createIntegration(createIntegrationInput: CreateIntegrationInput!): Boolean!
 }
 
 type Subscription {
-  integrationCreated: Integration
-  integrationUpdated: Integration!
-  integrationRemoved: Integration!
+  integrationCreated(id: String!): [IntegrationStep]
 }

@@ -1,0 +1,4 @@
+GRAPHQL_PLAYGROUND=true
+
+# Services
+SERVICE_LOGISTICA_REVERSA=https://af-logreversa-hlg.azurewebsites.net/api/consultarstd

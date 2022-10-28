@@ -1,0 +1,1 @@
+{"query":"mutation {\\r\\n  createIntegration(createIntegrationInput: {exampleField: 1}){\\r\\n    std\\r\\n    sat\\r\\n    status\\r\\n    __typename\\r\\n  }\\r\\n}","variables":{}}
