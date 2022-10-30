@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Prepare Python to GraphQL dependencies
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+
 # Create app directory
 WORKDIR /usr/src/app
 

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: integration
+  labels:
+    app: integration
+spec:
+  selector:
+    matchLabels:
+      app: integration
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: integration
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: integration
+          image: integration:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 400m
+              memory: 300Mi
+          ports:
+            - containerPort: 3000
+              name: integration
