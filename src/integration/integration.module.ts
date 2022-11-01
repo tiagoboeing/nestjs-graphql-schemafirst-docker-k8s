@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { IntegrationService } from './integration.service';
-import { IntegrationResolver } from './integration.resolver';
 import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import Redis, { RedisOptions } from 'ioredis';
+import { IntegrationResolver } from './integration.resolver';
+import { IntegrationService } from './integration.service';
 
 @Module({
   imports: [HttpModule],
@@ -16,6 +16,7 @@ import Redis, { RedisOptions } from 'ioredis';
         const options: RedisOptions = {
           host: 'redis-cluster.redis.svc.cluster.local',
           port: 6379,
+          autoResubscribe: true,
         };
 
         return new RedisPubSub({
