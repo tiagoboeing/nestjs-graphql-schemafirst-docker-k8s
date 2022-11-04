@@ -17,7 +17,6 @@ import { IntegrationService } from './integration.service';
           host: 'redis.redis.svc.cluster.local',
           port: 6379,
           username: 'default',
-          autoResubscribe: true,
           showFriendlyErrorStack: true,
         };
 

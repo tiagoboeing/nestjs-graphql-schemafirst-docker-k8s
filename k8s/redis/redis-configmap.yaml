@@ -764,8 +764,10 @@ data:
     #
     # For more information about ACL configuration please refer to
     # the Redis web site at https://redis.io/topics/acl
-    user default on +@all ~* nopass
 
+    # Authentication credentials
+    user default on +@pubsub ~* nopass
+    user admin on +@all ~* >adminpassword
 
     # ACL LOG
     #
