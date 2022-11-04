@@ -14,9 +14,11 @@ import { IntegrationService } from './integration.service';
       provide: 'PUB_SUB',
       useFactory: () => {
         const options: RedisOptions = {
-          host: 'redis-cluster.redis.svc.cluster.local',
+          host: 'redis.redis.svc.cluster.local',
           port: 6379,
+          username: 'default',
           autoResubscribe: true,
+          showFriendlyErrorStack: true,
         };
 
         return new RedisPubSub({

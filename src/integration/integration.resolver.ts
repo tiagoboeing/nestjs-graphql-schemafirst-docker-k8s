@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Args, Mutation, Resolver, Subscription } from '@nestjs/graphql';
-import { PubSub } from 'graphql-subscriptions';
+import { PubSubEngine } from 'graphql-subscriptions';
 import { CreateIntegrationInput } from './dto/create-integration.input';
 import { IntegrationService } from './integration.service';
 
@@ -8,7 +8,7 @@ import { IntegrationService } from './integration.service';
 export class IntegrationResolver {
   constructor(
     private readonly integrationService: IntegrationService,
-    @Inject('PUB_SUB') private pubSub: PubSub,
+    @Inject('PUB_SUB') private pubSub: PubSubEngine,
   ) {}
 
   @Mutation('createIntegration')

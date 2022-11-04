@@ -1,11 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PubSub } from 'graphql-subscriptions';
-import { catchError, map } from 'rxjs';
+import { PubSubEngine } from 'graphql-subscriptions';
 import { setInterval } from 'timers';
 import { CreateIntegrationInput } from './dto/create-integration.input';
-import { UpdateIntegrationInput } from './dto/update-integration.input';
 
 @Injectable()
 export class IntegrationService {
@@ -16,8 +14,8 @@ export class IntegrationService {
 
   constructor(
     private readonly httpService: HttpService,
-    @Inject('PUB_SUB') private pubSub: PubSub,
     private readonly configService: ConfigService,
+    @Inject('PUB_SUB') private pubSub: PubSubEngine,
   ) {
     this.apiBaseUrl = this.configService.get('SERVICE_LOGISTICA_REVERSA');
   }
@@ -30,6 +28,16 @@ export class IntegrationService {
     await this.createSTD(createIntegrationInput.id);
 
     this.interval = setInterval(async () => {
+      if (this.iterations >= 5) {
+        this.iterations = 0;
+
+        this.logger.log(
+          `Integration finished for id ${createIntegrationInput.id}`,
+        );
+
+        return clearInterval(this.interval);
+      }
+
       this.logger.log(
         `Creating integration for id ${createIntegrationInput.id}...`,
       );
@@ -71,15 +79,6 @@ export class IntegrationService {
 
       this.iterations++;
       this.logger.log(this.iterations);
-
-      if (this.iterations >= 5) {
-        clearInterval(this.interval);
-        this.iterations = 0;
-
-        this.logger.log(
-          `Integration finished for id ${createIntegrationInput.id}`,
-        );
-      }
     }, 5000);
 
     return true;
