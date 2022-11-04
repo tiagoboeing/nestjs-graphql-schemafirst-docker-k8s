@@ -10,7 +10,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+
 COPY . .
+
+COPY opentelemetry.js .
 
 RUN npm ci
 
@@ -24,4 +27,4 @@ EXPOSE 3000
 
 
 # Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+CMD [ "node", "--require", "./opentelemetry.js", "dist/main.js" ]
