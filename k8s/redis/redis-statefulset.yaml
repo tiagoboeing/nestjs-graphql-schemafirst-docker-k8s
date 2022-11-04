@@ -4,7 +4,7 @@ metadata:
   name: redis
 spec:
   serviceName: redis
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: redis
@@ -71,16 +71,3 @@ spec:
         resources:
           requests:
             storage: 50Mi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis
-spec:
-  clusterIP: None
-  ports:
-    - port: 6379
-      targetPort: 6379
-      name: redis
-  selector:
-    app: redis
