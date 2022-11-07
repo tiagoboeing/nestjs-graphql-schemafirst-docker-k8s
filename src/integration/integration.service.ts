@@ -62,7 +62,7 @@ export class IntegrationService {
       //   .toPromise();
 
       this.apiResponse.data.push({
-        etapa: `${this.iterations}`,
+        etapa: `${this.iterations + 1}`,
       });
 
       if (this.apiResponse.data) {
@@ -79,6 +79,8 @@ export class IntegrationService {
       }
 
       this.iterations++;
+      this.apiResponse.data = [];
+
       this.logger.log(this.iterations);
     }, this.integrationInterval);
 
