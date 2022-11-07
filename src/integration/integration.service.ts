@@ -7,10 +7,14 @@ import { CreateIntegrationInput } from './dto/create-integration.input';
 
 @Injectable()
 export class IntegrationService {
-  interval = null;
-  iterations = 0;
   private readonly logger = new Logger(IntegrationService.name);
   private readonly apiBaseUrl: string;
+  private readonly integrationInterval: number;
+  private readonly integrationLimit: number;
+
+  interval = null;
+  iterations = 0;
+  apiResponse = { data: [] };
 
   constructor(
     private readonly httpService: HttpService,
@@ -18,6 +22,8 @@ export class IntegrationService {
     @Inject('PUB_SUB') private pubSub: PubSubEngine,
   ) {
     this.apiBaseUrl = this.configService.get('SERVICE_LOGISTICA_REVERSA');
+    this.integrationInterval = this.configService.get('INTEGRATION_INTERVAL');
+    this.integrationLimit = this.configService.get('INTEGRATION_LIMIT');
   }
 
   async create(
@@ -28,7 +34,7 @@ export class IntegrationService {
     await this.createSTD(createIntegrationInput.id);
 
     this.interval = setInterval(async () => {
-      if (this.iterations >= 5) {
+      if (this.iterations >= this.integrationLimit) {
         this.iterations = 0;
 
         this.logger.log(
@@ -55,19 +61,14 @@ export class IntegrationService {
       //   )
       //   .toPromise();
 
-      const apiResponse = {
-        data: [
-          {
-            etapa: '1',
-          },
-          {
-            etapa: '2',
-          },
-        ],
-      };
+      this.apiResponse.data.push({
+        etapa: `${this.iterations + 1}`,
+      });
 
-      if (apiResponse) {
-        const steps = apiResponse.data.map((step) => ({ step: step.etapa }));
+      if (this.apiResponse.data) {
+        const steps = this.apiResponse.data.map((step) => ({
+          step: step.etapa,
+        }));
 
         this.logger.log(steps);
 
@@ -78,8 +79,10 @@ export class IntegrationService {
       }
 
       this.iterations++;
+      this.apiResponse.data = [];
+
       this.logger.log(this.iterations);
-    }, 5000);
+    }, this.integrationInterval);
 
     return true;
   }
