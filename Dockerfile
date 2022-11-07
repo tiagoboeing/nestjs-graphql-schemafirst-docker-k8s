@@ -1,30 +1,59 @@
-FROM node:18-alpine
+###################
 
-# Prepare Python to GraphQL dependencies
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+# BUILD FOR LOCAL DEVELOPMENT
 
-# Create app directory
+###################
+
+FROM node:18-alpine As development
+
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/\*
+
 WORKDIR /usr/src/app
 
-# Install app dependencies using the `npm ci` command instead of `npm install`
-
-COPY package*.json ./
-
-
-COPY . .
-
-COPY opentelemetry.js .
+COPY --chown=node:node package\*.json ./
 
 RUN npm ci
 
-# Run the build command which creates the production bundle
+COPY --chown=node:node . .
+
+USER node
+
+###################
+
+# BUILD FOR PRODUCTION
+
+###################
+
+FROM node:18-alpine As build
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node package\*.json ./
+
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+
+COPY --chown=node:node . .
+
+COPY --chown=node:node opentelemetry.js .
+
 RUN npm run build
 
-# Set NODE_ENV environment variable
 ENV NODE_ENV production
 
-EXPOSE 3000
+RUN npm ci --only=production && npm cache clean --force
 
+USER node
 
-# Start the server using the production build
+###################
+
+# PRODUCTION
+
+###################
+
+FROM node:18-alpine As production
+
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node opentelemetry.js .
+
 CMD [ "node", "--require", "./opentelemetry.js", "dist/main.js" ]
