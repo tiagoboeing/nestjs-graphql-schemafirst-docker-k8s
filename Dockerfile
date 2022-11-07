@@ -26,6 +26,8 @@ USER node
 
 FROM node:18-alpine As build
 
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/\*
+
 WORKDIR /usr/src/app
 
 COPY --chown=node:node package\*.json ./
@@ -40,7 +42,7 @@ RUN npm run build
 
 ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 USER node
 
