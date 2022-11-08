@@ -17,6 +17,26 @@ This repository includes a full cycle NestJS stack to develop with containers:
 - Kubernetes cluster (if you desire to use it);
 - DynaTrace account (if you desire to use it);
 
+## Configs
+
+### Redis
+
+The Redis auth credentials were changed to:
+
+```bash
+user default on +@pubsub ~* nopass
+user admin on +@all ~* >adminpassword
+```
+
+Credentials:
+
+| Username  | Scope    | Password                 |
+| --------- | -------- | ------------------------ |
+| `default` | `pubsub` | `nopass` (make it empty) |
+| `admin`   | `all`    | `adminpassword`          |
+
+> **Note:** you can change the credentials in the [`redis-configmap.yaml`](./k8s/redis/redis-configmap.yaml) file [on these lines](https://github.com/tiagoboeing/nestjs-graphql-schemafirst-docker-k8s/blob/5ad865af51fccf942550d991a662796b34f957ca/k8s/redis/redis-configmap.yaml#L768-L770).
+
 ## Workflow
 
 ### Local development
