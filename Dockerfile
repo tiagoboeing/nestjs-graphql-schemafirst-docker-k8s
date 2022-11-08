@@ -1,61 +1,47 @@
 ###################
-
 # BUILD FOR LOCAL DEVELOPMENT
-
 ###################
-
 FROM node:18-alpine As development
 
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/\*
-
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package\*.json ./
-
-RUN npm ci
-
-COPY --chown=node:node . .
-
-USER node
-
-###################
-
-# BUILD FOR PRODUCTION
-
-###################
-
-FROM node:18-alpine As build
-
+# Python to GraphQL schema build
 RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/\*
 
-WORKDIR /usr/src/app
+COPY package*.json ./
 
-COPY --chown=node:node package\*.json ./
+RUN npm ci --omit=production
 
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
-
-COPY --chown=node:node . .
-
-COPY --chown=node:node opentelemetry.js .
+COPY . .
 
 RUN npm run build
 
-ENV NODE_ENV production
+###################
+# PRODUCTION
+###################
+FROM node:18-alpine As production
 
-RUN npm ci --omit=dev && npm cache clean --force
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+# Python to GraphQL schema build
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/\*
+
+COPY package*.json ./
+
+RUN npm ci --omit=dev
+
+COPY --chown=node:node . .
+
+# copy build from development
+COPY --chown=node:node --from=development /usr/src/app/dist ./dist
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node opentelemetry.js .
 
 USER node
 
-###################
+EXPOSE 3000
 
-# PRODUCTION
-
-###################
-
-FROM node:18-alpine As production
-
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-COPY --chown=node:node opentelemetry.js .
-
-CMD [ "node", "--require", "./opentelemetry.js", "dist/main.js" ]
+CMD ["node", "--require", "./opentelemetry.js", "dist/main.js"]

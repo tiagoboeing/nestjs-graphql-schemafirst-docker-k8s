@@ -1,15 +1,31 @@
+version: '3'
+
 services:
   api:
+    container_name: api
     build:
-      dockerfile: Dockerfile
       context: .
-      # Only will build development stage from our dockerfile
+      dockerfile: Dockerfile
       target: development
+    command: npm run start:debug-remote
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
-    - .env
-    # Run a command against the development stage of the image
-    command: npm run start:dev
+      - .env.development
     ports:
-      - 3000:3000
+      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
+      - 9229:9229 # debugger
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis:6.2.3-alpine
+    networks:
+      - app-network
+
+networks:
+  app-network:

@@ -9,7 +9,7 @@ async function bootstrap() {
   // Starts listening for shutdown hooks - Kubernetes
   app.enableShutdownHooks();
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.SERVER_PORT || 3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
   app.use((req) => console.log(req));
 }
