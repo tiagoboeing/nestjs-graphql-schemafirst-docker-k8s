@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
-  apiToken: ZHQwYzAxLkMyS0pMWEhXNk0zRElVWEEyQVdYREFSVi5XVTRDUlhCQ01WSkczN1VJS0RKRTVQWktOSVhEUkRUSUNSU082WUtGQU5RNlMyVk5GNkZTRUgyQTdISFZHNzdR
-  dataIngestToken: ZHQwYzAxLlVGTEQ1U1pRVjZLRjNUSzQ3TEhISFYyNC5SS1pUSVJFVk40R1ZGVkNFQlEyRFNQS0FWSDNRR1I3QUNNM0cyVEZMR0EyQkhKQlA2N1pQVTJDUEJYSEZONVk2
+  apiToken: <your-token>
+  dataIngestToken: <your-token>
 kind: Secret
 metadata:
   name: kubernetes-docker-desktop
@@ -20,7 +20,7 @@ spec:
   # For SaaS, set `YOUR_ENVIRONMENT_ID` to your environment ID.
   # For Managed, change the apiUrl address.
   # For instructions on how to determine the environment ID and how to configure the apiUrl address, see https://www.dynatrace.com/support/help/reference/dynatrace-concepts/environment-id/.
-  apiUrl: https://gne69212.live.dynatrace.com/api
+  apiUrl: https://<your-domain>.live.dynatrace.com/api
 
   # Optional: name of secret holding `apiToken` and `paasToken`
   # If unset, name of custom resource is used

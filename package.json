@@ -1,10 +1,19 @@
 {
-  "name": "atende-mais-integration",
+  "name": "nestjs-schema-first",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "description": "Full cycle NestJS Schema first stack",
+  "author": "Tiago Boeing <contato@tiagoboeing.com>",
+  "contributors": [
+    {
+      "name": "Paulo Weber",
+      "email": "pauloweber@hotmail.com.br"
+    }
+  ],
+  "private": false,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "prebuild": "rimraf dist && cpx \"src/**/*.graphql\" \"dist\"",
     "build": "nest build",
