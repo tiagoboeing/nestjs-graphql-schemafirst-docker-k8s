@@ -24,6 +24,9 @@ spec:
         - name: integration
           image: integration:latest
           imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: integration-configmap
           resources:
             requests:
               cpu: 100m
