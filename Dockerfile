@@ -10,7 +10,7 @@ RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/\*
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --omit=production
+RUN npm ci
 
 COPY --chown=node:node . .
 
