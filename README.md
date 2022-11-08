@@ -90,3 +90,7 @@ sh ./k8s/start-k8s-cluster.sh
 ```
 
 > **Note:** If you changed the Docker image name to other value (not `integration`), you will need to replace the K8S deployments with the new image.
+
+## Notes
+
+- [`.graphql` files need to be manually copied to the `dist` folder](https://github.com/nestjs/graphql/issues/135);
