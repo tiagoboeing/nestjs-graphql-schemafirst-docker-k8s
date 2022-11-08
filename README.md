@@ -42,6 +42,8 @@ You can configure the environment variables in the file [`.env.development`](./.
 
 ### Build
 
+> On this repository we are using `integration` as the image name, but you can change it to whatever you want.
+
 You can build the application with:
 
 ```bash
@@ -66,3 +68,5 @@ docker run --rm -it -p 3000:3000 <image-name>
 # This command will create namespaces and apply deployments
 sh ./k8s/start-k8s-cluster.sh
 ```
+
+> **Note:** If you changed the Docker image name to other value (not `integration`), you will need to replace the K8S deployments with the new image.
