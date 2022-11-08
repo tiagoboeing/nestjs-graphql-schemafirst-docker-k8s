@@ -19,6 +19,11 @@ This repository includes a full cycle NestJS stack to develop with containers:
 
 ## Configs
 
+Environment variables are defined on:
+
+- `.env` - for local development, via Docker and NodeJS. [Read more on this section](#configuring-environment-variables).
+- `ConfigMap` - for production or another environment using Kubernetes. [On this location](./k8s/configmap.yml).
+
 ### Redis
 
 The Redis auth credentials were changed to:
@@ -62,7 +67,9 @@ npm run start:dev
 
 #### Configuring environment variables
 
-You can configure the environment variables in the file [`.env.development`](./.env.development).
+You can configure the environment variables in the file [`.env`](./.env).
+
+> **Note:** the `.env` file will be used ONLY for local development. On production or another environment, you will need to change it via [ConfigMap](./k8s/configmap.yml) (if using K8S).
 
 ### Build
 
