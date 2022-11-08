@@ -1,5 +1,6 @@
 version: '3'
 
+name: integration
 services:
   api:
     container_name: api

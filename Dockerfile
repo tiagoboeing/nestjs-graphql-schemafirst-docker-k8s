@@ -57,6 +57,6 @@ COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/opentelemetry.js .
 
-# EXPOSE 3000
+EXPOSE 3000
 
 CMD ["node", "--require", "./opentelemetry.js", "dist/main.js"]
