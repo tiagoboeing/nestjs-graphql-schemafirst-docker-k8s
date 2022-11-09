@@ -15,6 +15,7 @@ export class CreateIntegrationInput {
 export class IntegrationStep {
     __typename?: 'IntegrationStep';
     step: string;
+    id: string;
 }
 
 export abstract class IMutation {

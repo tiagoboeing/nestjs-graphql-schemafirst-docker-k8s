@@ -1,5 +1,6 @@
 type IntegrationStep {
   step: String!
+  id: String!
 }
 
 input CreateIntegrationInput {

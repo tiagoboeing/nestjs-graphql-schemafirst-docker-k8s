@@ -1,10 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PubSubEngine } from 'graphql-subscriptions';
 import { setInterval } from 'timers';
 import { CreateIntegrationInput } from './dto/create-integration.input';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class IntegrationService {
   private readonly logger = new Logger(IntegrationService.name);
   private readonly integrationInterval: number;
@@ -49,6 +49,7 @@ export class IntegrationService {
       if (this.apiResponse.data) {
         const steps = this.apiResponse.data.map((step) => ({
           step: step.etapa,
+          id: createIntegrationInput.id,
         }));
 
         this.logger.log(steps);
@@ -69,7 +70,7 @@ export class IntegrationService {
   }
 
   async createSTD(id: string) {
-    this.logger.log(`Created STD for ${id}`);
+    this.logger.log(`Created for ${id}`);
     return null;
   }
 }
