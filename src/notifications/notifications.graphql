@@ -17,6 +17,10 @@ type Subscription {
   notificationCreated(topic: String!): Notification!
 }
 
+type Query {
+  notification(id: String!): Notification
+}
+
 type Mutation {
   createNotification(
     createNotificationInput: CreateNotificationInput!

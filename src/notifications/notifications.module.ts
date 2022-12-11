@@ -4,9 +4,10 @@ import { NotificationsResolver } from './notifications.resolver';
 import { RedisPubSubModule } from '../infra/redis-pubsub/redis-pubsub.module';
 import { RedisQueueModule } from '../infra/redis-queue/redis-queue.module';
 import { NotificationsWorker } from './workers/notifications.worker';
+import { RedisCacheModule } from '../infra/redis-cache/redis-cache.module';
 
 @Module({
-  imports: [RedisPubSubModule, RedisQueueModule],
+  imports: [RedisCacheModule, RedisPubSubModule, RedisQueueModule],
   providers: [NotificationsResolver, NotificationsService, NotificationsWorker],
 })
 export class NotificationsModule {}

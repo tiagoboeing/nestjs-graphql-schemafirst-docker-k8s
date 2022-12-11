@@ -28,14 +28,15 @@ export interface ISubscription {
     notificationCreated(topic: string): Notification | Promise<Notification>;
 }
 
+export interface IQuery {
+    __typename?: 'IQuery';
+    notification(id: string): Nullable<Notification> | Promise<Nullable<Notification>>;
+    hello(): string | Promise<string>;
+}
+
 export interface IMutation {
     __typename?: 'IMutation';
     createNotification(createNotificationInput: CreateNotificationInput): Notification | Promise<Notification>;
-}
-
-export interface IQuery {
-    __typename?: 'IQuery';
-    hello(): string | Promise<string>;
 }
 
 export type DateTime = any;

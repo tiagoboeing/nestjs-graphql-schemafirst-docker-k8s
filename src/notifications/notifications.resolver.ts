@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Args, Mutation, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSubEngine } from 'graphql-subscriptions';
 import { PUB_SUB } from '../infra/redis-pubsub/redis-pubsub.module';
 import { CreateNotificationInput } from './dto/create-notification.input';
@@ -20,11 +20,16 @@ export class NotificationsResolver {
     return this.notificationsService.create(createNotificationInput);
   }
 
+  @Query('notification')
+  getNotification(@Args('id') id: string) {
+    return this.notificationsService.findOne(id);
+  }
+
   @Subscription('notificationCreated', {
     resolve: (payload) => payload,
     filter: (payload, variables) => payload.topic === variables.topic,
   })
-  async notificationCreated() {
+  notificationCreated() {
     /**
      * You can receive the input using `@Args('topic') topic: string` as method param
      */

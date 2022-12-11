@@ -11,10 +11,12 @@ import { join } from 'path';
 import { isProduction } from './@core/environments';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { RedisQueueModule } from './infra/redis-queue/redis-queue.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
+    RedisQueueModule.forRoot(),
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
