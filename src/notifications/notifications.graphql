@@ -2,12 +2,14 @@ type Notification {
   id: String!
   topic: String!
   message: String!
+  email: String
   createdAt: DateTime! # use Scalar type from graphql-scalars
 }
 
 input CreateNotificationInput {
   topic: String!
   message: String!
+  email: String
 }
 
 type Subscription {

@@ -11,6 +11,7 @@
 export interface CreateNotificationInput {
     topic: string;
     message: string;
+    email?: Nullable<string>;
 }
 
 export interface Notification {
@@ -18,6 +19,7 @@ export interface Notification {
     id: string;
     topic: string;
     message: string;
+    email?: Nullable<string>;
     createdAt: DateTime;
 }
 

@@ -6,10 +6,11 @@ This repository includes a full cycle NestJS stack to develop with containers:
   - [`class-validator`](https://github.com/typestack/class-validator) package with middleware configured to show errors when input data don't matches with criteria's
   - [`nestjs-pino`](https://github.com/iamolegga/nestjs-pino): replaces built-in Nest logger to register outputs using JSON syntax and easily allow to collect with ElasticSearch or tools like that.
   - Modules to work with Redis:
-    - `infra/redis-cache/redis-cache.module.ts`: To use Redis as key/value, useful for cache functionality
+    - `infra/redis-cache/redis-cache.module.ts`: To use Redis as key/value, useful for cache functionality, needs `cache-manager` (already installed)
     - `infra/redis-pubsub/redis-pubsub.module.ts`: To use Redis as Pub/Sub
     - `infra/redis-queue/redis-queue.module.ts`: To use Redis as queue and execute async tasks
   - [`withCancel()` function to listen when client disconnect from `Subscription`](https://github.com/nestjs/graphql/issues/186#issuecomment-478238683)
+  - [`ms`](https://github.com/vercel/ms): Allow to easily convert values from string to milliseconds, like `1d`, `1m`, etc.
 - [Dockerfile](./Dockerfile) with multi-stage build and [`docker-compose`](./docker-compose.yml) to local development with live reload and debugger;
 - [Redis](./k8s/redis/) (via Kubernetes with StatefulSet);
 - [Dynatrace](./k8s/dynatrace/) (via Kubernetes) - you will need to configure OneAgent following the DynaTrace docs;

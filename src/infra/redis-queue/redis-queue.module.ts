@@ -7,7 +7,7 @@ import environments from '../../@core/environments';
   imports: [
     BullModule.registerQueue(
       // TODO: you need to register each queue here
-      { name: 'your-first-queue-name-here' },
+      { name: 'notifications-queue' },
       { name: 'your-second-queue-name-here' },
     ),
   ],
