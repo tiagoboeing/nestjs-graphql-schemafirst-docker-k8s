@@ -13,7 +13,6 @@ This repository includes a full cycle NestJS stack to develop with containers:
     - `infra/redis-cache/redis-cache.module.ts`: To use Redis as key/value, useful for cache functionality, needs `cache-manager` (already installed)
     - `infra/redis-pubsub/redis-pubsub.module.ts`: To use Redis as Pub/Sub
     - `infra/redis-queue/redis-queue.module.ts`: To use Redis as queue and execute async tasks
-  - [`withCancel()` function to listen when client disconnect from `Subscription`](https://github.com/nestjs/graphql/issues/186#issuecomment-478238683)
   - [`ms`](https://github.com/vercel/ms): Allow to easily convert values from string to milliseconds, like `1d`, `1m`, etc.
 - [Dockerfile](./Dockerfile) with multi-stage build and [`docker-compose`](./docker-compose.yml) to local development with live reload and debugger;
 - [Redis](./k8s/redis/) (via Kubernetes with StatefulSet);
@@ -21,13 +20,6 @@ This repository includes a full cycle NestJS stack to develop with containers:
   - [OpenTelemetry](./opentelemetry.js) will be used for this.
 - [Kubernetes deployments](./k8s/) - application, ingress and service;
 - [Docker Desktop StorageClass fix](./k8s/docker-desktop/storageclass.yml) for Kubernetes (only when running locally);
-
-## Requirements
-
-- [Node.js](https://nodejs.org/en/) (v18);
-- [Docker](https://www.docker.com/products/docker-desktop) (with Docker Compose);
-- Kubernetes cluster (if you desire to use it);
-- DynaTrace account (if you desire to use it);
 
 ## GraphQL
 
@@ -37,6 +29,14 @@ The GraphQL includes:
 - `directive @deprecated` configured on `schema.graphql` for example purposes
 - [`graphql-scalars`](https://the-guild.dev/graphql/scalars): allow to work with custom types and validate data
   - `scalar DateTime` declared on `schema.graphql` only for example purposes
+- [`withCancel()` function to listen when client disconnect from `Subscription`](https://github.com/nestjs/graphql/issues/186#issuecomment-478238683)
+
+## Requirements
+
+- [Node.js](https://nodejs.org/en/) (v18);
+- [Docker](https://www.docker.com/products/docker-desktop) (with Docker Compose);
+- Kubernetes cluster (if you desire to use it);
+- DynaTrace account (if you desire to use it);
 
 ## Configs
 
