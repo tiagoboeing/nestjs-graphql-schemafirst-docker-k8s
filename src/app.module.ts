@@ -2,10 +2,16 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
+import { isProduction } from './@core/environments';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { IntegrationModule } from './integration/integration.module';
+import {
+  resolvers as scalarResolvers,
+  typeDefs as scalarTypeDefs,
+} from 'graphql-scalars';
 
 @Module({
   imports: [
@@ -20,9 +26,11 @@ import { IntegrationModule } from './integration/integration.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         typePaths: ['./**/*.graphql'],
+        typeDefs: [...scalarTypeDefs],
+        resolvers: [scalarResolvers],
         definitions: {
           path: join(process.cwd(), 'src/graphql.ts'),
-          outputAs: 'class',
+          outputAs: 'interface',
           emitTypenameField: true,
         },
         introspection: true,
@@ -32,6 +40,19 @@ import { IntegrationModule } from './integration/integration.module';
           'subscriptions-transport-ws': true,
         },
       }),
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: !isProduction && 'trace',
+        transport: !isProduction
+          ? {
+              target: 'pino-pretty',
+              options: {
+                singleLine: true,
+              },
+            }
+          : undefined,
+      },
     }),
   ],
   controllers: [AppController],
