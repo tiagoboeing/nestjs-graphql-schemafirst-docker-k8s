@@ -27,7 +27,10 @@ import { IntegrationModule } from './integration/integration.module';
         },
         introspection: true,
         playground: configService.get<boolean>('GRAPHQL_PLAYGROUND'),
-        installSubscriptionHandlers: true,
+        subscriptions: {
+          'graphql-ws': true,
+          'subscriptions-transport-ws': true,
+        },
       }),
     }),
   ],
