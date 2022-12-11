@@ -2,20 +2,19 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import {
+  resolvers as scalarResolvers,
+  typeDefs as scalarTypeDefs,
+} from 'graphql-scalars';
 import { LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
 import { isProduction } from './@core/environments';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { IntegrationModule } from './integration/integration.module';
-import {
-  resolvers as scalarResolvers,
-  typeDefs as scalarTypeDefs,
-} from 'graphql-scalars';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
-    IntegrationModule,
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
@@ -54,6 +53,7 @@ import {
           : undefined,
       },
     }),
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

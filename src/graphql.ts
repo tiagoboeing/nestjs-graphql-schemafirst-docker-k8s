@@ -8,24 +8,27 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export interface CreateIntegrationInput {
-    id: string;
+export interface CreateNotificationInput {
+    topic: string;
+    message: string;
 }
 
-export interface IntegrationStep {
-    __typename?: 'IntegrationStep';
-    step: string;
+export interface Notification {
+    __typename?: 'Notification';
     id: string;
-}
-
-export interface IMutation {
-    __typename?: 'IMutation';
-    createIntegration(createIntegrationInput: CreateIntegrationInput): boolean | Promise<boolean>;
+    topic: string;
+    message: string;
+    createdAt: DateTime;
 }
 
 export interface ISubscription {
     __typename?: 'ISubscription';
-    integrationCreated(id: string): Nullable<Nullable<IntegrationStep>[]> | Promise<Nullable<Nullable<IntegrationStep>[]>>;
+    notificationCreated(topic: string): Notification | Promise<Notification>;
+}
+
+export interface IMutation {
+    __typename?: 'IMutation';
+    createNotification(createNotificationInput: CreateNotificationInput): Notification | Promise<Notification>;
 }
 
 export interface IQuery {

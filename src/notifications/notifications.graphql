@@ -1,0 +1,22 @@
+type Notification {
+  id: String!
+  topic: String!
+  message: String!
+  createdAt: DateTime! # use Scalar type from graphql-scalars
+}
+
+input CreateNotificationInput {
+  topic: String!
+  message: String!
+}
+
+type Subscription {
+  "Receive events when a notification is created inside a specific topic"
+  notificationCreated(topic: String!): Notification!
+}
+
+type Mutation {
+  createNotification(
+    createNotificationInput: CreateNotificationInput!
+  ): Notification!
+}
