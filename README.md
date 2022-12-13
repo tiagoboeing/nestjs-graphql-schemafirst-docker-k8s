@@ -86,6 +86,10 @@ SERVER_PORT=4000 docker-compose up --build -V
 npm run start:dev
 ```
 
+#### Docker Compose
+
+To access services (like mocks) on host machine, you can simply use the DNS: `host.docker.internal`
+
 #### Configuring environment variables
 
 You can configure the environment variables in the file [`.env`](./.env).
