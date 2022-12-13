@@ -1,6 +1,6 @@
 version: '3'
 
-name: integration
+name: nestjs-graphql-schemafirst
 services:
   api:
     container_name: api
@@ -25,6 +25,8 @@ services:
   redis:
     container_name: redis
     image: redis:6.2.3-alpine
+    ports:
+      - 6379:6379
     networks:
       - app-network
 
