@@ -159,3 +159,4 @@ sh ./k8s/start-k8s-cluster.sh
 
 - [`.graphql` files need to be manually copied to the `dist` folder](https://github.com/nestjs/graphql/issues/135);
 - [Defining log points with Pino](https://github.com/iamolegga/nestjs-pino#example)
+- [Error when adding `redisStore` on RedisCacheModule](https://github.com/node-cache-manager/node-cache-manager/issues/210)
