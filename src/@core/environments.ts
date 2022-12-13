@@ -3,6 +3,8 @@ export default {
     host: 'REDIS_HOST',
     port: 'REDIS_PORT',
     username: 'REDIS_USERNAME',
+    password: 'REDIS_PASSWORD',
+    prefix: 'REDIS_PREFIX',
   },
   pubsub: {
     timeout: 'PUBSUB_TIMEOUT',
