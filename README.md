@@ -63,6 +63,16 @@ Credentials:
 
 > **Note:** you can change the credentials in the [`redis-configmap.yaml`](./k8s/redis/redis-configmap.yaml) file [on these lines](https://github.com/tiagoboeing/nestjs-graphql-schemafirst-docker-k8s/blob/5ad865af51fccf942550d991a662796b34f957ca/k8s/redis/redis-configmap.yaml#L768-L770).
 
+#### Key prefix
+
+The keys stored on Redis for all modules (Queue, PubSub, Cache) will have a prefix to avoid conflicts with other applications. The value is defined on the `REDIS_PREFIX` environment variable. The default value is the value of `name` property on `package.json` file.
+
+| Resource/Module              | Key example            |
+| ---------------------------- | ---------------------- |
+| `Cache`/`RedisCacheModule`   | `prefix`:`cache`:`key` |
+| `Queue`/`RedisQueueModule`   | `prefix`:`key`         |
+| `PubSub`/`RedisPubSubModule` | `prefix`:`key`         |
+
 ### DynaTrace
 
 If you don't want to use DynaTrace, you can remove the `opentelemetry.js` file and will need to remove the [`Dockerfile`](./Dockerfile) excluding `"--require", "./opentelemetry.js"` [on this line](https://github.com/tiagoboeing/nestjs-graphql-schemafirst-docker-k8s/blob/2c7daad63ea0fe7712353334aaa1d0702caee989/Dockerfile#L62).

@@ -3,11 +3,12 @@ import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { Cache } from 'cache-manager';
 import { PubSubEngine } from 'graphql-subscriptions';
-import ms from 'ms';
 import { PinoLogger } from 'nestjs-pino';
 import { v4 as uuid } from 'uuid';
 import { Notification } from '../graphql';
+import { RedisCacheService } from '../infra/redis-cache/redis-cache.service';
 import { PUB_SUB } from '../infra/redis-pubsub/redis-pubsub.module';
+import { millisecondsToSeconds } from '../shared/utils/ms/ms.util';
 import { CreateNotificationInput } from './dto/create-notification.input';
 
 @Injectable()
@@ -15,15 +16,14 @@ export class NotificationsService {
   constructor(
     private readonly logger: PinoLogger,
     @Inject(PUB_SUB) private readonly pubSub: PubSubEngine,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-    @InjectQueue('notifications-queue')
-    private readonly queue: Queue,
+    @InjectQueue('notifications-queue') private readonly queue: Queue,
+    private readonly cacheService: RedisCacheService,
   ) {
     this.logger.setContext(NotificationsService.name);
   }
 
   async findOne(id: string): Promise<Notification> {
-    const notification: Notification = await this.cacheManager.get(
+    const notification: Notification = await this.cacheService.get(
       `notification:${id}`,
     );
 
@@ -64,10 +64,10 @@ export class NotificationsService {
      * Cache notification on Redis to be retrieved with Query
      */
     this.logger.debug(`Defining cache key to notification...`);
-    await this.cacheManager.set(
+    await this.cacheService.set(
       `notification:${payload.id}`,
       payload,
-      ms('1h'),
+      millisecondsToSeconds('1h'),
     );
 
     return payload;

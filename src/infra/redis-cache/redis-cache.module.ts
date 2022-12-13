@@ -1,13 +1,8 @@
-import {
-  CacheModule,
-  CacheModuleAsyncOptions,
-  CacheStore,
-  Module,
-} from '@nestjs/common';
+import { CacheModule, CacheModuleAsyncOptions, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-store';
-import ms from 'ms';
 import environments from '../../@core/environments';
+import { millisecondsToSeconds } from '../../shared/utils/ms/ms.util';
 import { RedisCacheService } from './redis-cache.service';
 
 @Module({
@@ -23,21 +18,22 @@ import { RedisCacheService } from './redis-cache.service';
           },
           username: config.get(environments.redis.username),
           password: config.get(environments.redis.password),
-          ttl: +config.get(environments.cache.ttl) || ms('10m'),
+          ttl:
+            +config.get(environments.cache.ttl) || millisecondsToSeconds('10m'),
         });
 
-        /**
-         * FIXME:
-         * Will need the `as` cast because this issue:
-         * https://github.com/dabroek/node-cache-manager-redis-store/issues/40
-         */
         return {
-          store,
-        } as CacheModuleAsyncOptions;
+          /**
+           * FIXME:
+           * Will need to use the `as` cast because this issue:
+           * https://github.com/dabroek/node-cache-manager-redis-store/issues/40
+           */
+          store: store as unknown as string,
+        };
       },
     }),
   ],
   providers: [ConfigService, RedisCacheService],
-  exports: [CacheModule],
+  exports: [CacheModule, RedisCacheService],
 })
 export class RedisCacheModule {}
