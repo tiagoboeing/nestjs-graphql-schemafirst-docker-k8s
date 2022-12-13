@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import Redis, { RedisOptions } from 'ioredis';
 import environments from '../../@core/environments';
+import { name as appName } from '../../../package.json';
 
 export const PUB_SUB = 'PUB_SUB';
 
@@ -18,6 +19,7 @@ export const PUB_SUB = 'PUB_SUB';
           username: config.get(environments.redis.username),
           showFriendlyErrorStack: true,
           commandTimeout: +config.get(environments.pubsub.timeout) || 3000,
+          keyPrefix: config.get(environments.redis.prefix) || appName,
         };
 
         return new RedisPubSub({

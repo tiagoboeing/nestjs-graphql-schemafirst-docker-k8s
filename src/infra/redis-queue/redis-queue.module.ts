@@ -2,6 +2,7 @@ import { BullModule } from '@nestjs/bull';
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import environments from '../../@core/environments';
+import { name as appName } from '../../../package.json';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ export class RedisQueueModule {
               host: config.get(environments.redis.host),
               port: +config.get(environments.redis.port) || 6379,
               username: config.get(environments.redis.username),
+              keyPrefix: config.get(environments.redis.prefix) || appName,
             },
           }),
         }),
