@@ -13,7 +13,7 @@ export const PUB_SUB = 'PUB_SUB';
     {
       provide: PUB_SUB,
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
+      useFactory: async (config: ConfigService) => {
         const options: RedisOptions = {
           host: config.get(environments.redis.host),
           port: +config.get(environments.redis.port) || 6379,

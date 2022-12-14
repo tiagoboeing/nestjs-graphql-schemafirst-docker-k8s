@@ -23,7 +23,7 @@ export class RedisQueueModule {
         BullModule.forRootAsync({
           imports: [ConfigModule],
           inject: [ConfigService],
-          useFactory: (config: ConfigService) => ({
+          useFactory: async (config: ConfigService) => ({
             redis: {
               host: config.get(environments.redis.host),
               port: +config.get(environments.redis.port) || 6379,
