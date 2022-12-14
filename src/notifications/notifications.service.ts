@@ -1,7 +1,6 @@
 import { InjectQueue } from '@nestjs/bull';
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
-import { Cache } from 'cache-manager';
 import { PubSubEngine } from 'graphql-subscriptions';
 import { PinoLogger } from 'nestjs-pino';
 import { v4 as uuid } from 'uuid';

@@ -32,6 +32,7 @@ import { RedisCacheService } from './redis-cache.service';
         };
       },
     }),
+    ConfigModule,
   ],
   providers: [ConfigService, RedisCacheService],
   exports: [CacheModule, RedisCacheService],

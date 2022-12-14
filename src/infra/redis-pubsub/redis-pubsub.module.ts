@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import Redis, { RedisOptions } from 'ioredis';
 import environments from '../../@core/environments';
@@ -8,6 +8,7 @@ import { name as appName } from '../../../package.json';
 export const PUB_SUB = 'PUB_SUB';
 
 @Module({
+  imports: [ConfigModule],
   providers: [
     {
       provide: PUB_SUB,

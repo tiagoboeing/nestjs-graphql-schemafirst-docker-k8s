@@ -11,6 +11,7 @@ import { name as appName } from '../../../package.json';
       { name: 'notifications-queue' },
       { name: 'your-second-queue-name-here' },
     ),
+    ConfigModule,
   ],
   exports: [BullModule],
 })
