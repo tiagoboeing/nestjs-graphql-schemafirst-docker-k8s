@@ -14,6 +14,7 @@ This repository includes a full cycle NestJS stack to develop with containers:
     - `infra/redis-pubsub/redis-pubsub.module.ts`: To use Redis as Pub/Sub
     - `infra/redis-queue/redis-queue.module.ts`: To use Redis as queue and execute async tasks
   - [`ms`](https://github.com/vercel/ms): Allow to easily convert values from string to milliseconds, like `1d`, `1m`, etc.
+  - [`@golevelup/ts-jest`](https://www.npmjs.com/package/@golevelup/ts-jest): Allow to easily create mocks from providers and use them on tests
 - [Dockerfile](./Dockerfile) with multi-stage build and [`docker-compose`](./docker-compose.yml) to local development with live reload and debugger;
 - [Redis](./k8s/redis/) (via Kubernetes with StatefulSet);
 - [Dynatrace](./k8s/dynatrace/) (via Kubernetes) - you will need to configure OneAgent following the DynaTrace docs;
