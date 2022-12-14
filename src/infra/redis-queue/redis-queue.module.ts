@@ -33,6 +33,7 @@ export class RedisQueueModule {
           }),
         }),
       ],
+      exports: [BullModule],
     };
   }
 }
