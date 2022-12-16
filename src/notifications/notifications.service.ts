@@ -52,11 +52,12 @@ export class NotificationsService {
 
     /**
      * Dispatch a worker to execute async process, like e-mail sending
+     * @note if running with Docker compose, access Bull Board on http://localhost:4000 and see the job
      */
     this.logger.debug(`Dispatching async worker to send e-mail...`);
     await this.queue.add('notifications-queue', payload, {
       attempts: 2,
-      removeOnComplete: true,
+      removeOnComplete: false,
     });
 
     /**

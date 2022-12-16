@@ -30,5 +30,21 @@ services:
     networks:
       - app-network
 
+  bull-monitor:
+    container_name: bull-monitor
+    image: tiagoboeing/bull-board:latest
+    restart: always
+    ports:
+      - 4000:4000
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      QUEUE_PREFIX: nestjs-schema-first
+      QUEUE_NAMES: 'notifications-queue'
+    networks:
+      - app-network
+    depends_on:
+      - redis
+
 networks:
   app-network:
