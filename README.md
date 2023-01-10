@@ -66,6 +66,8 @@ Credentials:
 
 > **Note:** you can change the credentials in the [`redis-configmap.yaml`](./infra/k8s/redis/redis-configmap.yaml) file [on these lines](https://github.com/tiagoboeing/nestjs-graphql-schemafirst-docker-k8s/blob/5ad865af51fccf942550d991a662796b34f957ca/k8s/redis/redis-configmap.yaml#L768-L770).
 
+> **Local tests with Docker:** to apply permissions on localhost, you will need to change the [`redis.conf` on Docker folder](./infra/docker/redis.conf) too.
+
 #### Key prefix
 
 The keys stored on Redis for all modules (Queue, PubSub, Cache) will have a prefix to avoid conflicts with other applications. The value is defined on the `REDIS_PREFIX` environment variable. The default value is the value of `name` property on `package.json` file.
