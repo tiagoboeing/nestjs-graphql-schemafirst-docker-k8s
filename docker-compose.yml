@@ -25,6 +25,9 @@ services:
   redis:
     container_name: redis
     image: redis:6.2.3-alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./infra/docker/redis.conf:/usr/local/etc/redis/redis.conf # to simulate redis cluster with user credentials and roles
     ports:
       - 6379:6379
     networks:
