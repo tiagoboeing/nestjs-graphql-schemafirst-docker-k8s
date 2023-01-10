@@ -1,4 +1,5 @@
 export default {
+  logLevel: 'LOG_LEVEL',
   redis: {
     host: 'REDIS_HOST',
     port: 'REDIS_PORT',

@@ -8,7 +8,7 @@ import {
 } from 'graphql-scalars';
 import { LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
-import { isProduction } from './@core/environments';
+import environments, { isProduction } from './@core/environments';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RedisQueueModule } from './infra/redis-queue/redis-queue.module';
@@ -42,17 +42,26 @@ import { NotificationsModule } from './notifications/notifications.module';
         },
       }),
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        level: !isProduction && 'trace',
-        transport: !isProduction
-          ? {
-              target: 'pino-pretty',
-              options: {
-                singleLine: true,
-              },
-            }
-          : undefined,
+    LoggerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const customLogLevel = configService.get<string>(environments.logLevel);
+        const productionLogLevel = !isProduction ? 'trace' : 'info';
+
+        return {
+          pinoHttp: {
+            level: customLogLevel || productionLogLevel,
+            timestamp: () => `,"time":"${new Date().toISOString()}"`,
+            transport: !isProduction
+              ? {
+                  target: 'pino-pretty',
+                  options: {
+                    singleLine: true,
+                  },
+                }
+              : undefined,
+          },
+        };
       },
     }),
     NotificationsModule,
