@@ -16,11 +16,11 @@ This repository includes a full cycle NestJS stack to develop with containers:
   - [`ms`](https://github.com/vercel/ms): Allow to easily convert values from string to milliseconds, like `1d`, `1m`, etc.
   - [`@golevelup/ts-jest`](https://www.npmjs.com/package/@golevelup/ts-jest): Allow to easily create mocks from providers and use them on tests
 - [Dockerfile](./Dockerfile) with multi-stage build and [`docker-compose`](./docker-compose.yml) to local development with live reload and debugger;
-- [Redis](./k8s/redis/) (via Kubernetes with StatefulSet);
-- [Dynatrace](./k8s/dynatrace/) (via Kubernetes) - you will need to configure OneAgent following the DynaTrace docs;
+- [Redis](./infra/k8s/redis/) (via Kubernetes with StatefulSet);
+- [Dynatrace](./infra/k8s/dynatrace/) (via Kubernetes) - you will need to configure OneAgent following the DynaTrace docs;
   - [OpenTelemetry](./opentelemetry.js) will be used for this.
-- [Kubernetes deployments](./k8s/) - application, ingress and service;
-- [Docker Desktop StorageClass fix](./k8s/docker-desktop/storageclass.yml) for Kubernetes (only when running locally);
+- [Kubernetes deployments](./infra/k8s/) - application, ingress and service;
+- [Docker Desktop StorageClass fix](./infra/k8s/docker-desktop/storageclass.yml) for Kubernetes (only when running locally);
 
 ## GraphQL
 
@@ -44,7 +44,9 @@ The GraphQL includes:
 Environment variables are defined on:
 
 - `.env` - for local development, via Docker and NodeJS. [Read more on this section](#configuring-environment-variables).
-- `ConfigMap` - for production or another environment using Kubernetes. [On this location](./k8s/configmap.yml).
+- `ConfigMap` - for production or another environment using Kubernetes. [On this location](./infra/k8s/configmap.yml).
+
+> See all available environment variables on [`environments.ts`](src/@core/environments.ts) file.
 
 ### Redis
 
@@ -57,12 +59,12 @@ user admin on +@all ~* >adminpassword
 
 Credentials:
 
-| Username  | Scope    | Password                 |
-| --------- | -------- | ------------------------ |
-| `default` | `pubsub` | `nopass` (make it empty) |
-| `admin`   | `all`    | `adminpassword`          |
+| Username  | Scope    | Password                   | ACL (permissions)                                                                                             |
+| --------- | -------- | -------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `default` | `pubsub` | **nopass** (make it empty) | `+@read +@write +@list +@set +@string +@connection +@transaction +@stream +@pubsub +@scripting +@slow +@fast` |
+| `admin`   | `all`    | `adminpassword`            | `+@all`                                                                                                       |
 
-> **Note:** you can change the credentials in the [`redis-configmap.yaml`](./k8s/redis/redis-configmap.yaml) file [on these lines](https://github.com/tiagoboeing/nestjs-graphql-schemafirst-docker-k8s/blob/5ad865af51fccf942550d991a662796b34f957ca/k8s/redis/redis-configmap.yaml#L768-L770).
+> **Note:** you can change the credentials in the [`redis-configmap.yaml`](./infra/k8s/redis/redis-configmap.yaml) file [on these lines](https://github.com/tiagoboeing/nestjs-graphql-schemafirst-docker-k8s/blob/5ad865af51fccf942550d991a662796b34f957ca/k8s/redis/redis-configmap.yaml#L768-L770).
 
 #### Key prefix
 
@@ -97,6 +99,8 @@ SERVER_PORT=4000 docker-compose up --build -V
 npm run start:dev
 ```
 
+> If you made changes on Redis container, run Docker Compose using `--force-recreate` to reload `redis.conf` file.
+
 #### Docker Compose
 
 To access services (like mocks) on host machine, you can simply use the DNS: `host.docker.internal`
@@ -105,7 +109,7 @@ To access services (like mocks) on host machine, you can simply use the DNS: `ho
 
 You can configure the environment variables in the file [`.env`](./.env).
 
-> **Note:** the `.env` file will be used ONLY for local development. On production or another environment, you will need to change it via [ConfigMap](./k8s/configmap.yml) (if using K8S).
+> **Note:** the `.env` file will be used ONLY for local development. On production or another environment, you will need to change it via [ConfigMap](./infra/k8s/configmap.yml) (if using K8S).
 
 #### Execute without Docker Compose
 
@@ -133,7 +137,7 @@ npm run start:dev
 
 You can configure the environment variables in the file [`.env`](./.env).
 
-> **Note:** the `.env` file will be used ONLY for local development. On production or another environment, you will need to change it via [ConfigMap](./k8s/configmap.yml) (if using K8S).
+> **Note:** the `.env` file will be used ONLY for local development. On production or another environment, you will need to change it via [ConfigMap](./infra/k8s/configmap.yml) (if using K8S).
 
 ### Build
 
@@ -161,7 +165,7 @@ docker run --rm -it -p 3000:3000 <image-name>
 
 ```bash
 # This command will create namespaces and apply deployments
-sh ./k8s/start-k8s-cluster.sh
+sh ./infra/k8s/start-k8s-cluster.sh
 ```
 
 > **Note:** If you changed the Docker image name to other value (not `integration`), you will need to replace the K8S deployments with the new image.

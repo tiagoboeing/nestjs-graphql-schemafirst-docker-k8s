@@ -766,7 +766,7 @@ data:
     # the Redis web site at https://redis.io/topics/acl
 
     # Authentication credentials
-    user default on +@pubsub ~* nopass
+    user default on +@read +@write +@list +@set +@string +@connection +@transaction +@stream +@pubsub +@scripting +@slow +@fast ~* nopass
     user admin on +@all ~* >adminpassword
 
     # ACL LOG
