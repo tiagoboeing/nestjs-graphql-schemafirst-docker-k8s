@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="/home/tiagoboeing/code/personal/nestjs-graphql-schemafirst-docker-k8s/src/infra/redis-cache/redis-cache.service.spec.ts">
-    <testCase name="RedisCacheService should be defined" duration="12"/>
-    <testCase name="RedisCacheService getKeyWithPrefix() When using .env file should correct key prefix from .env" duration="8"/>
-    <testCase name="RedisCacheService getKeyWithPrefix() When using fallback value should use fallback prefix" duration="2"/>
-    <testCase name="RedisCacheService get() should call Cache Manager with correct params" duration="2"/>
-    <testCase name="RedisCacheService get() should correct return value" duration="2"/>
-    <testCase name="RedisCacheService get() should not return value if not exists" duration="2"/>
-    <testCase name="RedisCacheService set() should set value to cache" duration="3"/>
-    <testCase name="RedisCacheService set() should set value to cache with TTL" duration="2"/>
-    <testCase name="RedisCacheService del() should correct call Cache Manager" duration="2"/>
-    <testCase name="RedisCacheService wrap() should correct call Cache Manager" duration="2"/>
-    <testCase name="RedisCacheService wrap() should correct call Cache Manager with ttl" duration="2"/>
-    <testCase name="RedisCacheService reset() should correct call Cache Manager" duration="2"/>
+  <file path="/home/tiagoboeing/code/personal/nestjs-graphql-schemafirst-docker-k8s/src/notifications/notifications.service.spec.ts">
+    <testCase name="NotificationsService should be defined" duration="23"/>
   </file>
 </testExecutions>

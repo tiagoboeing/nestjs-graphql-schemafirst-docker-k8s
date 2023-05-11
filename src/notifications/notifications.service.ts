@@ -2,7 +2,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Inject, Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { PubSubEngine } from 'graphql-subscriptions';
-import { PinoLogger } from 'nestjs-pino';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { v4 as uuid } from 'uuid';
 import { Notification } from '../graphql';
 import { RedisCacheService } from '../infra/redis-cache/redis-cache.service';
@@ -13,13 +13,12 @@ import { CreateNotificationInput } from './dto/create-notification.input';
 @Injectable()
 export class NotificationsService {
   constructor(
+    @InjectPinoLogger(NotificationsService.name)
     private readonly logger: PinoLogger,
     @Inject(PUB_SUB) private readonly pubSub: PubSubEngine,
     @InjectQueue('notifications-queue') private readonly queue: Queue,
     private readonly cacheService: RedisCacheService,
-  ) {
-    this.logger.setContext(NotificationsService.name);
-  }
+  ) {}
 
   async findOne(id: string): Promise<Notification> {
     const notification: Notification = await this.cacheService.get(
