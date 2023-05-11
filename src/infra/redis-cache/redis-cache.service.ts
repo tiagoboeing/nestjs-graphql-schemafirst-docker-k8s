@@ -1,4 +1,5 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { Cache, Store } from 'cache-manager';
 import environments from '../../@core/environments';
@@ -28,7 +29,12 @@ export class RedisCacheService implements Cache<Store> {
 
   set(key: string, value: unknown, ttl?: number): Promise<void> {
     const keyWithPrefix = this.getKeyWithPrefix(key);
-    return this.cacheManager.set(keyWithPrefix, value, ttl);
+
+    /**
+     * FIXME: TTL only works passing as object
+     * https://github.com/dabroek/node-cache-manager-redis-store/issues/40#issuecomment-1382683850
+     */
+    return this.cacheManager.set(keyWithPrefix, value, ttl && ({ ttl } as any));
   }
 
   del(key: string): Promise<void> {
