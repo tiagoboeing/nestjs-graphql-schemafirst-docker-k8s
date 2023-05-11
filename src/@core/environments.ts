@@ -19,3 +19,5 @@ export default {
 };
 
 export const isProduction = process.env.NODE_ENV === 'production';
+
+export const useSSL = Boolean(process.env.LOCALHOST_HTTPS);
