@@ -1,5 +1,5 @@
 import { createMock } from '@golevelup/ts-jest';
-import { CACHE_MANAGER } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Cache } from 'cache-manager';
@@ -10,6 +10,7 @@ const FAKE_REDIS_PREFIX = 'env-prefix';
 
 describe('RedisCacheService', () => {
   let service: RedisCacheService;
+
   const mockConfigServiceGet = jest.fn();
   const mockCacheManagerGet = jest.fn();
   const mockCacheManagerSet = jest.fn();
@@ -44,9 +45,7 @@ describe('RedisCacheService', () => {
     service = module.get<RedisCacheService>(RedisCacheService);
   });
 
-  afterEach(() => jest.restoreAllMocks());
-
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(service).toBeDefined();
   });
 
@@ -56,7 +55,7 @@ describe('RedisCacheService', () => {
         mockConfigServiceGet.mockReturnValue(FAKE_REDIS_PREFIX);
       });
 
-      it('should correct key prefix from .env', () => {
+      test('should correct key prefix from .env', () => {
         const key = 'test';
         const result = service['getKeyWithPrefix'](key);
 
@@ -70,7 +69,7 @@ describe('RedisCacheService', () => {
         mockConfigServiceGet.mockReturnValue(null);
       });
 
-      it('should use fallback prefix', () => {
+      test('should use fallback prefix', () => {
         const key = 'test';
         const result = service['getKeyWithPrefix'](key);
 
@@ -88,7 +87,7 @@ describe('RedisCacheService', () => {
 
     afterEach(jest.resetAllMocks);
 
-    it('should call Cache Manager with correct params', () => {
+    test('should call Cache Manager with correct params', () => {
       mockCacheManagerGet.mockResolvedValue(null);
 
       service.get<string>('test');
@@ -98,7 +97,7 @@ describe('RedisCacheService', () => {
       );
     });
 
-    it('should correct return value', () => {
+    test('should correct return value', () => {
       mockCacheManagerGet.mockResolvedValue('value');
 
       const result = service.get('test');
@@ -107,7 +106,7 @@ describe('RedisCacheService', () => {
       expect(result).resolves.toEqual('value');
     });
 
-    it('should not return value if not exists', () => {
+    test('should not return value if not exists', () => {
       mockCacheManagerGet.mockResolvedValue(null);
 
       const result = service.get<string>('test');
@@ -123,8 +122,8 @@ describe('RedisCacheService', () => {
       mockConfigServiceGet.mockReturnValue(FAKE_REDIS_PREFIX);
     });
 
-    it('should set value to cache', () => {
-      const result = service.set('my-key', 'value');
+    test('should set value to cache', async () => {
+      const result = await service.set('my-key', 'value');
 
       expect(mockCacheManagerSet).toHaveBeenCalledWith(
         `${FAKE_REDIS_PREFIX}:cache:my-key`,
@@ -135,13 +134,13 @@ describe('RedisCacheService', () => {
       expect(result).toEqual(undefined);
     });
 
-    it('should set value to cache with TTL', () => {
-      const result = service.set('my-key', 'value', 60);
+    test('should set value to cache with TTL', async () => {
+      const result = await service.set('my-key', 'value', 60);
 
       expect(mockCacheManagerSet).toHaveBeenCalledWith(
         `${FAKE_REDIS_PREFIX}:cache:my-key`,
         'value',
-        60,
+        { ttl: 60 },
       );
 
       expect(result).toEqual(undefined);
@@ -154,7 +153,7 @@ describe('RedisCacheService', () => {
       mockConfigServiceGet.mockReturnValue(FAKE_REDIS_PREFIX);
     });
 
-    it('should correct call Cache Manager', () => {
+    test('should correct call Cache Manager', () => {
       const result = service.del('my-key');
 
       expect(mockCacheManagerDel).toHaveBeenCalledWith(
@@ -171,7 +170,7 @@ describe('RedisCacheService', () => {
       mockConfigServiceGet.mockReturnValue(FAKE_REDIS_PREFIX);
     });
 
-    it('should correct call Cache Manager', () => {
+    test('should correct call Cache Manager', () => {
       const spyFn = jest.fn();
       const result = service.wrap('my-key', spyFn);
 
@@ -184,7 +183,7 @@ describe('RedisCacheService', () => {
       expect(result).toEqual(undefined);
     });
 
-    it('should correct call Cache Manager with ttl', () => {
+    test('should correct call Cache Manager with ttl', () => {
       const spyFn = jest.fn();
       const result = service.wrap('my-key', spyFn, 60);
 
@@ -204,7 +203,7 @@ describe('RedisCacheService', () => {
       mockConfigServiceGet.mockReturnValue(FAKE_REDIS_PREFIX);
     });
 
-    it('should correct call Cache Manager', () => {
+    test('should correct call Cache Manager', () => {
       const result = service.reset();
 
       expect(mockCacheManagerReset).toHaveBeenCalledWith();
