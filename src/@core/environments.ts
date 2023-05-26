@@ -13,8 +13,6 @@ export default {
   cache: {
     ttl: 'CACHE_TTL',
   },
-  integrationInterval: 'INTEGRATION_INTERVAL',
-  integrationLimit: 'INTEGRATION_LIMIT',
   services: {},
 };
 

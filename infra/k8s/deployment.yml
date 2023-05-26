@@ -24,6 +24,14 @@ spec:
         - name: integration
           image: integration:latest
           imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 60
+            timeoutSeconds: 5
+            failureThreshold: 3
           envFrom:
             - configMapRef:
                 name: integration-configmap
