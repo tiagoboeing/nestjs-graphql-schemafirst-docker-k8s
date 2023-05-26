@@ -1,10 +1,23 @@
-import { CacheModule } from '@nestjs/cache-manager';
-import { CacheStore, Module } from '@nestjs/common';
+import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
+import { CacheStore, Inject, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Store } from 'cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import type { RedisClientOptions } from 'redis';
+import Redis from 'redis';
 import environments from '../../@core/environments';
 import { RedisCacheService } from './redis-cache.service';
+
+interface RedisCache extends Cache {
+  store: RedisStore;
+}
+
+interface RedisStore extends Store {
+  name: 'redis';
+  getClient: () => Redis.RedisClientType;
+  isCacheableValue: (value: any) => boolean;
+}
 
 @Module({
   imports: [
@@ -23,6 +36,11 @@ import { RedisCacheService } from './redis-cache.service';
           socket: {
             host: config.get(environments.redis.host),
             port: +config.get(environments.redis.port) || 6379,
+
+            reconnectStrategy: function (times) {
+              const delay = Math.min(1000 + times * 50, 2000);
+              return delay;
+            },
           },
           username: config.get(environments.redis.username),
           password: config.get(environments.redis.password),
@@ -35,4 +53,26 @@ import { RedisCacheService } from './redis-cache.service';
   providers: [ConfigService, RedisCacheService],
   exports: [CacheModule, RedisCacheService],
 })
-export class RedisCacheModule {}
+export class RedisCacheModule implements OnModuleInit {
+  constructor(
+    @InjectPinoLogger(RedisCacheModule.name)
+    private readonly logger: PinoLogger,
+    @Inject(CACHE_MANAGER) private readonly cache: RedisCache,
+  ) {}
+
+  onModuleInit() {
+    const client = this.cache.store.getClient();
+
+    client.on('connect', () => this.logger.info('Redis client reconnected!'));
+    client.on('ready', () => this.logger.debug('Redis client is ready'));
+    client.on('end', () => this.logger.info('Redis client connection closed'));
+
+    client.on('reconnecting', () =>
+      this.logger.info('Redis client is reconnecting to server...'),
+    );
+
+    client.on('error', (error: Error) =>
+      this.logger.error(`Redis connection failed! Error: "${error?.message}"`),
+    );
+  }
+}
