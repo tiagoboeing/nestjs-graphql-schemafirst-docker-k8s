@@ -12,6 +12,7 @@ import environments, { isProduction } from './@core/environments';
 import { HealthModule } from './@core/health/health.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { context } from './context';
 import { RedisQueueModule } from './infra/redis-queue/redis-queue.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
@@ -30,16 +31,36 @@ import { NotificationsModule } from './notifications/notifications.module';
         typePaths: ['./**/*.graphql'],
         typeDefs: [...scalarTypeDefs],
         resolvers: [scalarResolvers],
+        context,
         definitions: {
           path: join(process.cwd(), 'src/graphql.ts'),
           outputAs: 'interface',
           emitTypenameField: true,
         },
         introspection: true,
-        playground: configService.get<boolean>('GRAPHQL_PLAYGROUND'),
+        playground: configService.get<boolean>(environments.graphqlPlayground),
         subscriptions: {
           'graphql-ws': true,
           'subscriptions-transport-ws': true,
+        },
+        formatError: (error: any) => {
+          const graphQLFormattedError = {
+            code:
+              error?.extensions?.originalError?.error ||
+              error.extensions?.code ||
+              error.name ||
+              'INTERNAL_SERVER_ERROR',
+            ...error,
+            message:
+              error.extensions?.exception?.response?.message || error.message,
+            extensions: {
+              ...error?.extensions,
+              code: undefined,
+              stacktrace: undefined,
+            },
+          };
+
+          return graphQLFormattedError;
         },
       }),
     }),
@@ -47,7 +68,9 @@ import { NotificationsModule } from './notifications/notifications.module';
     LoggerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const customLogLevel = configService.get<string>(environments.logLevel);
+        const customLogLevel = configService.get<string>(
+          environments.log.level,
+        );
         const productionLogLevel = !isProduction ? 'trace' : 'info';
 
         return {
