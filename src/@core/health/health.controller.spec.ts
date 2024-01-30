@@ -10,8 +10,6 @@ import environments from '../environments';
 import { HealthController } from './health.controller';
 
 describe('HealthController', () => {
-  jest.useFakeTimers();
-
   let controller: HealthController;
 
   const spyMicroserviceHealth = createMock<MicroserviceHealthIndicator>({
