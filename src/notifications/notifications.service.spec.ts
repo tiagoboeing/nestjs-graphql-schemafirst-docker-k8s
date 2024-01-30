@@ -8,6 +8,8 @@ import { NotificationsService } from './notifications.service';
 import { Queue } from 'bull';
 
 describe('NotificationsService', () => {
+  jest.useFakeTimers();
+
   let service: NotificationsService;
   let queue: Queue;
 
