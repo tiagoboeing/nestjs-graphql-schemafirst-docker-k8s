@@ -23,7 +23,6 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   testResultsProcessor: 'jest-sonar-reporter',
   clearMocks: true,
-  detectOpenHandles: true,
 };
 
 export default config;
