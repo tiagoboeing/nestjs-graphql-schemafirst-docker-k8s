@@ -41,6 +41,7 @@ export interface IMutation {
 
 export type DateTime = any;
 export type Time = any;
+export type DateTimeISO = any;
 export type Timestamp = any;
 export type TimeZone = any;
 export type UtcOffset = any;
@@ -48,6 +49,7 @@ export type Duration = any;
 export type ISO8601Duration = any;
 export type LocalDate = any;
 export type LocalTime = any;
+export type LocalDateTime = any;
 export type LocalEndTime = any;
 export type EmailAddress = any;
 export type NegativeFloat = any;
@@ -99,4 +101,7 @@ export type RoutingNumber = any;
 export type AccountNumber = any;
 export type Cuid = any;
 export type SemVer = any;
+export type DeweyDecimal = any;
+export type LCCSubclass = any;
+export type IPCPatent = any;
 type Nullable<T> = T | null;

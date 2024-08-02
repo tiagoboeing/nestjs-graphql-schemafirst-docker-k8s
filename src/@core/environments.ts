@@ -1,5 +1,8 @@
 export default {
-  logLevel: 'LOG_LEVEL',
+  log: {
+    level: 'LOG_LEVEL',
+  },
+  graphqlPlayground: 'GRAPHQL_PLAYGROUND',
   redis: {
     host: 'REDIS_HOST',
     port: 'REDIS_PORT',
